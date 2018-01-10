@@ -53,7 +53,7 @@ public interface DB_manager {
 
     public ArrayList<Promotion> getPromotions();
 
-    public ArrayList<Reservation> getReservations();
+    public ArrayList<Reservation> getOpenReservations();
 
     public ArrayList<Reservation> getReservationsOnGoing();
 

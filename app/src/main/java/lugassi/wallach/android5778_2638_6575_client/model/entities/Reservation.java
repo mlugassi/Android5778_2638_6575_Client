@@ -1,5 +1,7 @@
 package lugassi.wallach.android5778_2638_6575_client.model.entities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Reservation {
@@ -49,18 +51,45 @@ public class Reservation {
         isOpen = open;
     }
 
-    public Calendar getStartDate() {
-        return startDate;
-    }
 
     public void setStartDate(Calendar startDate) {
         this.startDate = startDate;
+    }
+    public Calendar getStartDate() {
+        return startDate;
+    }
+    public String getStartDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(startDate.getTime());
+    }
+    public void setStartDate(String startDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.startDate = Calendar.getInstance();
+            this.startDate.setTime(sdf.parse(startDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public Calendar getEndDate() {
         return endDate;
     }
+    public String getEndDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(endDate.getTime());
+    }
+    public void setEndDate(String endDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.endDate = Calendar.getInstance();
+            this.endDate.setTime(sdf.parse(endDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+    }
     public void setEndDate(Calendar endDate) {
         this.endDate = endDate;
     }
@@ -68,7 +97,20 @@ public class Reservation {
     public Calendar getReturnDate() {
         return returnDate;
     }
+    public String getReturnDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(returnDate.getTime());
+    }
+    public void setReturnDate(String returnDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            this.returnDate = Calendar.getInstance();
+            this.returnDate.setTime(sdf.parse(returnDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+    }
     public void setReturnDate(Calendar returnDate) {
         this.returnDate = returnDate;
     }

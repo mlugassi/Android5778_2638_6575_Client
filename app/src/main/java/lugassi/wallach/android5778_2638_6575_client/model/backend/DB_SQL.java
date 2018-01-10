@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -361,8 +362,33 @@ public class DB_SQL implements DB_manager {
     }
 
     @Override
-    public ArrayList<Reservation> getReservations() {
-        return null;
+    public ArrayList<Reservation> getOpenReservations() {
+        ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+        try {
+            JSONArray array = new JSONObject(GET(url + "Reservation/GetOpenReservations.php")).getJSONArray("reservations");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                Reservation reservation = new Reservation();
+                reservation.setReservationID(jsonObject.getInt(ReservationConst.RESERVATION_ID));
+                reservation.setCustomerID(jsonObject.getInt(ReservationConst.CUSTOMER_ID));
+                reservation.setCarID(jsonObject.getInt(ReservationConst.CAR_ID));
+                reservation.setOpen(jsonObject.getBoolean(ReservationConst.IS_OPEN));
+                reservation.setStartDate(jsonObject.getString(ReservationConst.START_DATE));
+                reservation.setEndDate(jsonObject.getString(ReservationConst.END_DATE));
+                reservation.setReturnDate(jsonObject.getString(ReservationConst.RETURN_DATE));
+                reservation.setBeginMileage(jsonObject.getLong(ReservationConst.BEGIN_MILEAGE));
+                reservation.setFinishMileage(jsonObject.getLong(ReservationConst.FINISH_MILEAGE));
+                reservation.setGasFull(jsonObject.getBoolean(ReservationConst.IS_GAS_FULL));
+                reservation.setGasFilled(jsonObject.getInt(ReservationConst.GAS_FILLED));
+                reservation.setReservationCost(BigDecimal.valueOf(jsonObject.getDouble(ReservationConst.RESERVATION_COST)).floatValue());
+
+                reservations.add(reservation);
+            }
+        } catch (Exception e) {
+        }
+
+        return reservations;
     }
 
     @Override
