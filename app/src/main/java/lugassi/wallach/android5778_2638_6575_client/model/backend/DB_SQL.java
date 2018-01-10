@@ -18,8 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import lugassi.wallach.android5778_2638_6575.model.datasource.CarRentConst.*;
-import lugassi.wallach.android5778_2638_6575.model.entities.*;
+import lugassi.wallach.android5778_2638_6575_client.model.datasource.CarRentConst.*;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.*;
 
 /**
  * Created by Michael on 21/11/2017.

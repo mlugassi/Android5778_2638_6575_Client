@@ -4,12 +4,12 @@ import android.content.ContentValues;
 
 import java.util.ArrayList;
 
-import lugassi.wallach.android5778_2638_6575.model.entities.Branch;
-import lugassi.wallach.android5778_2638_6575.model.entities.Car;
-import lugassi.wallach.android5778_2638_6575.model.entities.CarModel;
-import lugassi.wallach.android5778_2638_6575.model.entities.Customer;
-import lugassi.wallach.android5778_2638_6575.model.entities.Promotion;
-import lugassi.wallach.android5778_2638_6575.model.entities.Reservation;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.Branch;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.Car;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.CarModel;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.Customer;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.Promotion;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.Reservation;
 
 
 /**
