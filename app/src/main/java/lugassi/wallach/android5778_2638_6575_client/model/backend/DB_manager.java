@@ -24,6 +24,7 @@ public interface DB_manager {
     public int addPromotion(ContentValues contentValues);
 
 
+
     public boolean updateCar(int carID, ContentValues contentValues);
 
     public boolean updateCustomer(int customerID, ContentValues contentValues);
