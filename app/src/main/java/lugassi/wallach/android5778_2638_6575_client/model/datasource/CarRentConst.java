@@ -2,7 +2,7 @@ package lugassi.wallach.android5778_2638_6575_client.model.datasource;
 
 import android.content.ContentValues;
 
-import lugassi.wallach.android5778_2638_6575.model.entities.*;
+import lugassi.wallach.android5778_2638_6575_client.model.entities.*;
 
 /**
  * Created by Michael on 13/11/2017.
