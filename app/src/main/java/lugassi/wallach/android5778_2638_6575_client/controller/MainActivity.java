@@ -1,4 +1,4 @@
-package lugassi.wallach.android5778_2638_6575_client;
+package lugassi.wallach.android5778_2638_6575_client.controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
