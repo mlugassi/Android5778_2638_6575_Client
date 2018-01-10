@@ -180,6 +180,7 @@ public class DB_SQL implements DB_manager {
     }
 
 
+
     @Override
     public boolean updateCustomer(int customerID, ContentValues contentValues) {
         try {
