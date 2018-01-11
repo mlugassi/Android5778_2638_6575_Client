@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -28,10 +30,10 @@ import lugassi.wallach.android5778_2638_6575_client.model.entities.*;
 
 public class DB_SQL implements DB_manager {
 
-    private String url = "http://mlugassi.vlab.jct.ac.il/";
+    private String url = "http://mlugassi.vlab.jct.ac.il/JAVA-Project/";
 
 
-
+    /// users
     @Override
     public String checkUser(String userName, String password) {
         try {
@@ -93,22 +95,19 @@ public class DB_SQL implements DB_manager {
         return true;
     }
 
+
+    /// promotions
+
     @Override
-    public int addCustomer(ContentValues contentValues) {
+    public boolean addPromotion(ContentValues contentValues) {
         try {
             Map<String, Object> params = new LinkedHashMap<>();
 
-            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
-            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
-            params.put(CustomerConst.CUSTOMER_ID, contentValues.getAsInteger(CustomerConst.CUSTOMER_ID));
-            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
-            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
-            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
-            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
-            params.put(CustomerConst.NUM_ACCIDENTS, 0);
-            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
+            params.put(PromotionConst.CUSTOMER_ID, contentValues.getAsInteger(PromotionConst.CUSTOMER_ID));
+            params.put(PromotionConst.TOTAL_RENT_DAYS, contentValues.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
+            params.put(PromotionConst.IS_USED, contentValues.getAsBoolean(PromotionConst.IS_USED));
 
-            String results = POST(url + "Customer/AddCustomer.php", params);
+            String results = POST(url + "Promotion/AddPromotion.php", params);
             if (results.equals("")) {
                 throw new Exception("An error occurred on the server's side");
             }
@@ -116,120 +115,54 @@ public class DB_SQL implements DB_manager {
                 throw new Exception(results.substring(5));
             }
         } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        return contentValues.getAsInteger(CustomerConst.CUSTOMER_ID);
-    }
-
-    @Override
-    public int addReservation(ContentValues contentValues) {
-        try {
-            Map<String, Object> params = new LinkedHashMap<>();
-
-            params.put(ReservationConst.RESERVATION_ID, contentValues.getAsInteger(ReservationConst.RESERVATION_ID));
-            params.put(ReservationConst.CUSTOMER_ID, contentValues.getAsInteger(ReservationConst.CUSTOMER_ID));
-            params.put(ReservationConst.CAR_ID, contentValues.getAsInteger(ReservationConst.CAR_ID));
-            params.put(ReservationConst.IS_OPEN, contentValues.getAsBoolean(ReservationConst.IS_OPEN));
-            params.put(ReservationConst.START_DATE, contentValues.getAsString(ReservationConst.START_DATE));
-            params.put(ReservationConst.END_DATE, contentValues.getAsString(ReservationConst.END_DATE));
-            params.put(ReservationConst.RETURN_DATE, contentValues.getAsString(ReservationConst.RETURN_DATE));
-            params.put(ReservationConst.BEGIN_MILEAGE, contentValues.getAsLong(ReservationConst.BEGIN_MILEAGE));
-            params.put(ReservationConst.FINISH_MILEAGE, contentValues.getAsLong(ReservationConst.FINISH_MILEAGE));
-            params.put(ReservationConst.IS_GAS_FULL, contentValues.getAsBoolean(ReservationConst.IS_GAS_FULL));
-            params.put(ReservationConst.GAS_FILLED, contentValues.getAsInteger(ReservationConst.GAS_FILLED));
-            params.put(ReservationConst.RESERVATION_COST, contentValues.getAsFloat(ReservationConst.RESERVATION_COST));
-
-            String results = POST(url + "Customer/AddReservation.php", params);
-            if (results.equals("")) {
-                throw new Exception("An error occurred on the server's side");
-            }
-            if (results.substring(0, 5).equalsIgnoreCase("error")) {
-                throw new Exception(results.substring(5));
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        return contentValues.getAsInteger(CustomerConst.CUSTOMER_ID);
-    }
-
-    @Override
-    public int addPromotion(ContentValues contentValues) {
-        return 0;
-    }
-
-    @Override
-    public boolean updateCar(int carID, ContentValues contentValues) {
-        try {
-            Map<String, Object> params = new LinkedHashMap<>();
-
-            params.put(CarConst.CAR_ID, carID);
-            params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
-            params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
-            params.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
-            params.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
-
-            String results = POST(url + "Car/UpdateCar.php", params);
-            if (results.equals("")) {
-                throw new Exception("An error occurred on the server's side");
-            }
-            if (results.substring(0, 5).equalsIgnoreCase("error")) {
-                throw new Exception(results.substring(5));
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage());
+            return false;
         }
         return true;
-    }
-
-
-
-    @Override
-    public boolean updateCustomer(int customerID, ContentValues contentValues) {
-        try {
-            Map<String, Object> params = new LinkedHashMap<>();
-
-            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
-            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
-            params.put(CustomerConst.CUSTOMER_ID, customerID);
-            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
-            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
-            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
-            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
-            params.put(CustomerConst.NUM_ACCIDENTS, contentValues.getAsInteger(CustomerConst.NUM_ACCIDENTS));
-            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
-
-            String results = POST(url + "Customer/UpdateCustomer.php", params);
-            if (results.equals("")) {
-                throw new Exception("An error occurred on the server's side");
-            }
-            if (results.substring(0, 5).equalsIgnoreCase("error")) {
-                throw new Exception(results.substring(5));
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-        return true;
-    }
-
-    @Override
-    public boolean updateReservation(int reservationID, ContentValues contentValues) {
-        return false;
     }
 
     @Override
     public boolean updatePromotion(int customerID, ContentValues contentValues) {
-        return false;
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(PromotionConst.CUSTOMER_ID, customerID);
+            params.put(PromotionConst.TOTAL_RENT_DAYS, contentValues.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
+            params.put(PromotionConst.IS_USED, contentValues.getAsBoolean(PromotionConst.IS_USED));
+
+            String results = POST(url + "Promotion/UpdatePromotion.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public boolean removeCustomer(int customerID) {
-        return false;
+    public Promotion getPromotion(int customerID) {
+        Promotion promotion = null;
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(PromotionConst.CUSTOMER_ID, customerID);
+
+            JSONArray array = new JSONObject(POST(url + "Promotion/GetPromotion.php", params)).getJSONArray("Promotion");
+            JSONObject jsonObject = array.getJSONObject(0);
+            promotion = new Promotion();
+            promotion.setCustomerID(jsonObject.getInt(PromotionConst.CUSTOMER_ID));
+            promotion.setTotalRentDays(jsonObject.getInt(PromotionConst.TOTAL_RENT_DAYS));
+            promotion.setUsed(jsonObject.getBoolean(PromotionConst.IS_USED));
+
+        } catch (Exception e) {
+        }
+        return promotion;
     }
 
-    @Override
-    public boolean removePromotion(int customerID) {
-        return false;
-    }
+    /// branches
 
     @Override
     public ArrayList<Branch> getBranches() {
@@ -255,10 +188,84 @@ public class DB_SQL implements DB_manager {
         return branches;
     }
 
-
     @Override
     public ArrayList<Branch> getBranches(int carModel) {
-        return null;
+        ArrayList<Branch> branches = new ArrayList<Branch>();
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CarModelConst.MODEL_CODE, carModel);
+
+            JSONArray array = new JSONObject(POST(url + "Branch/GetBranchesByCarModel.php", params)).getJSONArray("branches");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                Branch branch = new Branch(jsonObject.getInt(BranchConst.BRANCH_ID));
+                branch.setAddress(jsonObject.getString(BranchConst.ADDRESS));
+                branch.setMaxParkingSpace(jsonObject.getInt(BranchConst.MAX_PARKING_SPACE));
+                branch.setCity(jsonObject.getString(BranchConst.CITY));
+                branch.setBranchName(jsonObject.getString(BranchConst.BRANCH_NAME));
+                branch.setActualParkingSpace(jsonObject.getInt(BranchConst.ACTUAL_PARKING_SPACE));
+
+                branches.add(branch);
+            }
+        } catch (Exception e) {
+        }
+
+        return branches;
+    }
+
+    /// car models
+
+    @Override
+    public ArrayList<CarModel> getCarModels() {
+        ArrayList<CarModel> carModels = new ArrayList<CarModel>();
+        try {
+            JSONArray array = new JSONObject(GET(url + "CarModel/GetCarModels.php")).getJSONArray("carModels");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject jsonObject = array.getJSONObject(i);
+
+                CarModel carModel = new CarModel(jsonObject.getInt(CarModelConst.MODEL_CODE));
+                carModel.setCompany(Company.valueOf(jsonObject.getString(CarModelConst.COMPANY)));
+                carModel.setSeats(jsonObject.getInt(CarModelConst.SEATS));
+                carModel.setCarType(CarType.valueOf(jsonObject.getString(CarModelConst.CAR_TYPE)));
+                carModel.setEngineCapacity(EngineCapacity.valueOf(jsonObject.getString(CarModelConst.ENGINE_CAPACITY)));
+                carModel.setMaxGasTank(jsonObject.getInt(CarModelConst.MAX_GAS_TANK));
+                carModel.setModelName(jsonObject.getString(CarModelConst.MODEL_NAME));
+
+                carModels.add(carModel);
+            }
+        } catch (Exception e) {
+        }
+
+        return carModels;
+    }
+
+
+    /// cars
+
+    @Override
+    public boolean updateCar(int carID, ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CarConst.CAR_ID, carID);
+            params.put(CarConst.MODEL_CODE, contentValues.getAsInteger(CarConst.MODEL_CODE));
+            params.put(CarConst.BRANCH_ID, contentValues.getAsInteger(CarConst.BRANCH_ID));
+            params.put(CarConst.RESERVATIONS, contentValues.getAsInteger(CarConst.RESERVATIONS));
+            params.put(CarConst.MILEAGE, contentValues.getAsInteger(CarConst.MILEAGE));
+
+            String results = POST(url + "Car/UpdateCar.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return true;
     }
 
     @Override
@@ -305,28 +312,63 @@ public class DB_SQL implements DB_manager {
         return cars;
     }
 
+/// customers
+
+
     @Override
-    public ArrayList<CarModel> getCarModels() {
-        ArrayList<CarModel> carModels = new ArrayList<CarModel>();
+    public int addCustomer(ContentValues contentValues) {
         try {
-            JSONArray array = new JSONObject(GET(url + "CarModel/GetCarModels.php")).getJSONArray("carModels");
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject jsonObject = array.getJSONObject(i);
+            Map<String, Object> params = new LinkedHashMap<>();
 
-                CarModel carModel = new CarModel(jsonObject.getInt(CarModelConst.MODEL_CODE));
-                carModel.setCompany(Company.valueOf(jsonObject.getString(CarModelConst.COMPANY)));
-                carModel.setSeats(jsonObject.getInt(CarModelConst.SEATS));
-                carModel.setCarType(CarType.valueOf(jsonObject.getString(CarModelConst.CAR_TYPE)));
-                carModel.setEngineCapacity(EngineCapacity.valueOf(jsonObject.getString(CarModelConst.ENGINE_CAPACITY)));
-                carModel.setMaxGasTank(jsonObject.getInt(CarModelConst.MAX_GAS_TANK));
-                carModel.setModelName(jsonObject.getString(CarModelConst.MODEL_NAME));
+            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
+            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
+            params.put(CustomerConst.CUSTOMER_ID, contentValues.getAsInteger(CustomerConst.CUSTOMER_ID));
+            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
+            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
+            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
+            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
+            params.put(CustomerConst.NUM_ACCIDENTS, 0);
+            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
 
-                carModels.add(carModel);
+            String results = POST(url + "Customer/AddCustomer.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
             }
         } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
+        return contentValues.getAsInteger(CustomerConst.CUSTOMER_ID);
+    }
 
-        return carModels;
+    @Override
+    public boolean updateCustomer(int customerID, ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(CustomerConst.FIRST_NAME, contentValues.getAsString(CustomerConst.FIRST_NAME));
+            params.put(CustomerConst.FAMILY_NAME, contentValues.getAsString(CustomerConst.FAMILY_NAME));
+            params.put(CustomerConst.CUSTOMER_ID, customerID);
+            params.put(CustomerConst.PHONE, contentValues.getAsInteger(CustomerConst.PHONE));
+            params.put(CustomerConst.EMAIL, contentValues.getAsString(CustomerConst.EMAIL));
+            params.put(CustomerConst.CREDIT_CARD, contentValues.getAsLong(CustomerConst.CREDIT_CARD));
+            params.put(CustomerConst.GENDER, contentValues.getAsString(CustomerConst.GENDER));
+            params.put(CustomerConst.NUM_ACCIDENTS, contentValues.getAsInteger(CustomerConst.NUM_ACCIDENTS));
+            params.put(CustomerConst.BIRTH_DAY, contentValues.getAsString(CustomerConst.BIRTH_DAY));
+
+            String results = POST(url + "Customer/UpdateCustomer.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return true;
     }
 
     @Override
@@ -356,16 +398,39 @@ public class DB_SQL implements DB_manager {
         return customers;
     }
 
+/// reservations
+
     @Override
-    public ArrayList<Promotion> getPromotions() {
-        return null;
+    public int addReservation(ContentValues contentValues) {
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
+
+            params.put(ReservationConst.RESERVATION_ID, contentValues.getAsInteger(ReservationConst.RESERVATION_ID));
+            params.put(ReservationConst.CUSTOMER_ID, contentValues.getAsInteger(ReservationConst.CUSTOMER_ID));
+            params.put(ReservationConst.CAR_ID, contentValues.getAsInteger(ReservationConst.CAR_ID));
+            params.put(ReservationConst.IS_OPEN, true);
+            params.put(ReservationConst.START_DATE, contentValues.getAsString(ReservationConst.START_DATE));
+            params.put(ReservationConst.END_DATE, contentValues.getAsString(ReservationConst.END_DATE));
+            params.put(ReservationConst.BEGIN_MILEAGE, contentValues.getAsLong(ReservationConst.BEGIN_MILEAGE));
+
+            String results = POST(url + "Customer/AddReservation.php", params);
+            if (results.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(results.substring(5));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+        return contentValues.getAsInteger(CustomerConst.CUSTOMER_ID);
     }
 
     @Override
-    public ArrayList<Reservation> getOpenReservations() {
+    public ArrayList<Reservation> getReservationsOnGoing() {
         ArrayList<Reservation> reservations = new ArrayList<Reservation>();
         try {
-            JSONArray array = new JSONObject(GET(url + "Reservation/GetOpenReservations.php")).getJSONArray("reservations");
+            JSONArray array = new JSONObject(GET(url + "Reservation/GetOnGoingReservations.php")).getJSONArray("reservations");
             for (int i = 0; i < array.length(); i++) {
                 JSONObject jsonObject = array.getJSONObject(i);
 
@@ -392,13 +457,30 @@ public class DB_SQL implements DB_manager {
     }
 
     @Override
-    public ArrayList<Reservation> getReservationsOnGoing() {
-        return null;
-    }
+    public boolean closeReservation(int reservationID, ContentValues contentValues) {
+        String result = "";
+        try {
+            Map<String, Object> params = new LinkedHashMap<>();
 
-    @Override
-    public boolean closeReservation(int mileage) {
-        return false;
+            params.put(ReservationConst.RESERVATION_ID, contentValues.getAsInteger(ReservationConst.RESERVATION_ID));
+            params.put(ReservationConst.IS_OPEN, false);
+            params.put(ReservationConst.RETURN_DATE, contentValues.getAsString(ReservationConst.RETURN_DATE));
+            params.put(ReservationConst.FINISH_MILEAGE, contentValues.getAsLong(ReservationConst.FINISH_MILEAGE));
+            params.put(ReservationConst.IS_GAS_FULL, contentValues.getAsBoolean(ReservationConst.IS_GAS_FULL));
+            params.put(ReservationConst.GAS_FILLED, contentValues.getAsInteger(ReservationConst.GAS_FILLED));
+            params.put(ReservationConst.RESERVATION_COST, contentValues.getAsFloat(ReservationConst.RESERVATION_COST));
+
+            result = POST(url + "Reservation/CloseReservation.php", params);
+            if (result.equals("")) {
+                throw new Exception("An error occurred on the server's side");
+            }
+            if (result.substring(0, 5).equalsIgnoreCase("error")) {
+                throw new Exception(result.substring(5));
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -406,7 +488,7 @@ public class DB_SQL implements DB_manager {
         return false;
     }
 
-
+    /// post and get
     private static String GET(String url) throws ExecutionException, InterruptedException {
 
         return new AsyncTask<String, Object, String>() {

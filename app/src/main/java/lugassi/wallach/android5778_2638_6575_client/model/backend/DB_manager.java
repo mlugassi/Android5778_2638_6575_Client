@@ -21,7 +21,7 @@ public interface DB_manager {
 
     public int addReservation(ContentValues contentValues);
 
-    public int addPromotion(ContentValues contentValues);
+    public boolean addPromotion(ContentValues contentValues);
 
 
 
@@ -29,15 +29,7 @@ public interface DB_manager {
 
     public boolean updateCustomer(int customerID, ContentValues contentValues);
 
-    public boolean updateReservation(int reservationID, ContentValues contentValues);
-
     public boolean updatePromotion(int customerID, ContentValues contentValues);
-
-
-    public boolean removeCustomer(int customerID);
-
-    public boolean removePromotion(int customerID);
-
 
     public ArrayList<Branch> getBranches();
 
@@ -51,14 +43,12 @@ public interface DB_manager {
 
     public ArrayList<Customer> getCustomers();
 
-    public ArrayList<Promotion> getPromotions();
-
-    public ArrayList<Reservation> getOpenReservations();
+    public Promotion getPromotion(int customerID);
 
     public ArrayList<Reservation> getReservationsOnGoing();
 
 
-    public boolean closeReservation(int mileage);
+    public boolean closeReservation(int reservationID, ContentValues contentValues);
 
 
     public boolean checkReservations();
