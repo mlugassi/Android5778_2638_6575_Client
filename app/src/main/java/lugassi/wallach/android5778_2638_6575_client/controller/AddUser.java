@@ -76,7 +76,7 @@ public class AddUser extends Activity implements View.OnClickListener {
                     super.onPostExecute(aBoolean);
                     if(aBoolean)
                     {
-                        Intent intent = new Intent(AddUser.this , ManageActivity.class);
+                        Intent intent = new Intent(AddUser.this , MainNavigation.class);
                         finish();
                         AddUser.this.startActivity(intent);
                     }

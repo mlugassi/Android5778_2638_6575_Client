@@ -35,7 +35,7 @@ public class DB_SQL implements DB_manager {
 
     /// users
     @Override
-    public String checkUser(String userName, String password) {
+    public String checkUser(final String userName, final String password) {
         try {
             return new AsyncTask<String, Object, String>() {
                 @Override
@@ -82,7 +82,7 @@ public class DB_SQL implements DB_manager {
             params.put(UserConst.PASSWORD, password);
             params.put(UserConst.USER_ID, userID);
 
-            String results = POST(url + "Login/CreateNewUser.php", params);
+            String results = POST(url + "Login/CreateUser.php", params);
             if (results.equals("")) {
                 throw new Exception("An error occurred on the server's side");
             }
@@ -95,71 +95,147 @@ public class DB_SQL implements DB_manager {
         return true;
     }
 
+//    private String checkAdmin(String userName, String password) {
+//        String results = "";
+//        try {
+//            Map<String, Object> map = new LinkedHashMap<>();
+//
+//            map.put(UserConst.USER_NAME, userName.toLowerCase());
+//            map.put(UserConst.PASSWORD, password);
+//
+//            results = POST(url + "Login/CheckAdmin.php", map);
+//            if (results.equals("")) {
+//                throw new Exception("An error occurred on the server's side");
+//            }
+//            if (results.substring(0, 5).equalsIgnoreCase("error")) {
+//                throw new Exception(results.substring(5));
+//            }
+//        } catch (Exception e) {
+//            throw new IllegalArgumentException(e.getMessage());
+//        }
+//        return results;
+//    }
 
     /// promotions
 
     @Override
     public boolean addPromotion(ContentValues contentValues) {
         try {
-            Map<String, Object> params = new LinkedHashMap<>();
+            return new AsyncTask<ContentValues, Object, Boolean>() {
+                @Override
+                protected Boolean doInBackground(ContentValues... params) {
+                    try {
+                        Map<String, Object> data = new LinkedHashMap<>();
 
-            params.put(PromotionConst.CUSTOMER_ID, contentValues.getAsInteger(PromotionConst.CUSTOMER_ID));
-            params.put(PromotionConst.TOTAL_RENT_DAYS, contentValues.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
-            params.put(PromotionConst.IS_USED, contentValues.getAsBoolean(PromotionConst.IS_USED));
+                        ContentValues values = params[0];
 
-            String results = POST(url + "Promotion/AddPromotion.php", params);
-            if (results.equals("")) {
-                throw new Exception("An error occurred on the server's side");
-            }
-            if (results.substring(0, 5).equalsIgnoreCase("error")) {
-                throw new Exception(results.substring(5));
-            }
-        } catch (Exception e) {
-            return false;
+                        data.put(PromotionConst.CUSTOMER_ID, values.getAsInteger(PromotionConst.CUSTOMER_ID));
+                        data.put(PromotionConst.TOTAL_RENT_DAYS, values.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
+                        data.put(PromotionConst.IS_USED, values.getAsBoolean(PromotionConst.IS_USED));
+
+                        String results = POST(url + "Promotion/AddPromotion.php", data);
+                        if (results.equals("")) {
+                            throw new Exception("An error occurred on the server's side");
+                        }
+                        if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                            throw new Exception(results.substring(5));
+                        }
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e.getMessage());
+                    }
+                    return true;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    super.onPostExecute(result);
+                }
+            }.execute(contentValues).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
-    public boolean updatePromotion(int customerID, ContentValues contentValues) {
+    public boolean updatePromotion(ContentValues contentValues) {
         try {
-            Map<String, Object> params = new LinkedHashMap<>();
+            return new AsyncTask<ContentValues, Object, Boolean>() {
+                @Override
+                protected Boolean doInBackground(ContentValues... params) {
+                    try {
+                        Map<String, Object> data = new LinkedHashMap<>();
 
-            params.put(PromotionConst.CUSTOMER_ID, customerID);
-            params.put(PromotionConst.TOTAL_RENT_DAYS, contentValues.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
-            params.put(PromotionConst.IS_USED, contentValues.getAsBoolean(PromotionConst.IS_USED));
+                        ContentValues values = params[0];
 
-            String results = POST(url + "Promotion/UpdatePromotion.php", params);
-            if (results.equals("")) {
-                throw new Exception("An error occurred on the server's side");
-            }
-            if (results.substring(0, 5).equalsIgnoreCase("error")) {
-                throw new Exception(results.substring(5));
-            }
-        } catch (Exception e) {
-            return false;
+                        data.put(PromotionConst.CUSTOMER_ID, values.getAsInteger(PromotionConst.CUSTOMER_ID));
+                        data.put(PromotionConst.TOTAL_RENT_DAYS, values.getAsInteger(PromotionConst.TOTAL_RENT_DAYS));
+                        data.put(PromotionConst.IS_USED, values.getAsBoolean(PromotionConst.IS_USED));
+
+                        String results = POST(url + "Promotion/UpdatePromotion.php", data);
+                        if (results.equals("")) {
+                            throw new Exception("An error occurred on the server's side");
+                        }
+                        if (results.substring(0, 5).equalsIgnoreCase("error")) {
+                            throw new Exception(results.substring(5));
+                        }
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(e.getMessage());
+                    }
+                    return true;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    super.onPostExecute(result);
+                }
+            }.execute(contentValues).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
     public Promotion getPromotion(int customerID) {
-        Promotion promotion = null;
         try {
-            Map<String, Object> params = new LinkedHashMap<>();
+            return new AsyncTask<Integer, Object, Promotion>() {
+                @Override
+                protected Promotion doInBackground(Integer... params) {
+                    try {
+                        int param = params[0];
+                        Map<String, Object> data = new LinkedHashMap<>();
 
-            params.put(PromotionConst.CUSTOMER_ID, customerID);
+                        data.put(PromotionConst.CUSTOMER_ID, param);
 
-            JSONArray array = new JSONObject(POST(url + "Promotion/GetPromotion.php", params)).getJSONArray("Promotion");
-            JSONObject jsonObject = array.getJSONObject(0);
-            promotion = new Promotion();
-            promotion.setCustomerID(jsonObject.getInt(PromotionConst.CUSTOMER_ID));
-            promotion.setTotalRentDays(jsonObject.getInt(PromotionConst.TOTAL_RENT_DAYS));
-            promotion.setUsed(jsonObject.getBoolean(PromotionConst.IS_USED));
+                        JSONArray array = new JSONObject(POST(url + "Promotion/GetPromotion.php", data)).getJSONArray("Promotion");
+                        JSONObject jsonObject = array.getJSONObject(0);
+                        Promotion promotion = new Promotion();
+                        promotion.setCustomerID(jsonObject.getInt(PromotionConst.CUSTOMER_ID));
+                        promotion.setTotalRentDays(jsonObject.getInt(PromotionConst.TOTAL_RENT_DAYS));
+                        promotion.setUsed(jsonObject.getBoolean(PromotionConst.IS_USED));
 
-        } catch (Exception e) {
+                        return promotion;
+                    } catch (Exception e) {
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(Promotion result) {
+                    super.onPostExecute(result);
+                }
+            }.execute(customerID).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return promotion;
+        return null;
     }
 
     /// branches

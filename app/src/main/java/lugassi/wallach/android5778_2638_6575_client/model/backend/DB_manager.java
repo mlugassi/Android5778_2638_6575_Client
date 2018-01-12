@@ -24,12 +24,11 @@ public interface DB_manager {
     public boolean addPromotion(ContentValues contentValues);
 
 
-
     public boolean updateCar(int carID, ContentValues contentValues);
 
     public boolean updateCustomer(int customerID, ContentValues contentValues);
 
-    public boolean updatePromotion(int customerID, ContentValues contentValues);
+    public boolean updatePromotion(ContentValues contentValues);
 
     public ArrayList<Branch> getBranches();
 

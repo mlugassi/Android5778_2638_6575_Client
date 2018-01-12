@@ -63,7 +63,7 @@ public class Login extends Activity implements View.OnClickListener {
     void login() {
         if(!checkValues())
             return;
-        Intent intent = new Intent(Login.this, ManageActivity.class);
+        Intent intent = new Intent(Login.this, MainNavigation.class);
         String result = db_manager.checkUser(userNameEditText.getText().toString(), passwordEditText.getText().toString());
         if(result.contains("Success")) {
             finish();
