@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="lugassi.wallach.android5778_2638_6575_client.controller.MainNavigationActivity">
+    tools:context="lugassi.wallach.android5778_2638_6575_client.controller.MainNavigation">
     <item
         android:id="@+id/action_example"
         android:showAsAction="withText|ifRoom"

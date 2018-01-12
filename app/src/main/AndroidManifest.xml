@@ -21,13 +21,8 @@
         <activity android:name=".controller.Login" />
         <activity android:name=".controller.AddCustomer" />
         <activity android:name=".controller.AddUser" />
-        <activity android:name=".controller.ManageActivity" />
-        <activity android:name=".controller.AddBranch" />
-        <activity android:name=".controller.AddCar" />
-        <activity android:name=".controller.AddCarModel" />
-        <activity android:name=".controller.DataLists" />
         <activity
-            android:name=".controller.MainNavigationActivity"
+            android:name=".controller.MainNavigation"
             android:label="@string/title_activity_main_navigation"></activity>
     </application>
 

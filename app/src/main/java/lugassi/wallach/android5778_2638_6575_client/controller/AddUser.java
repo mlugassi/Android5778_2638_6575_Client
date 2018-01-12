@@ -93,13 +93,10 @@ public class AddUser extends Activity implements View.OnClickListener {
         }
     }
 
-
     @Override
     public void onClick(View v) {
         if (v == createButton) {
             addUser();
         }
     }
-
-
 }
