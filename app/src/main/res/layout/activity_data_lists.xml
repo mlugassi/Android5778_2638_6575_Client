@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/White"
+    android:orientation="vertical"
+    tools:context="lugassi.wallach.android5778_2638_6575_client.controller.DataLists">
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:textSize="40dp"-->
+    <!--android:gravity="center"-->
+    <!--android:background="@color/OrangeRed"-->
+    <!--android:textColor="@color/White"-->
+    <!--android:text="@string/textChooseDataList"/>-->
+
+    <Spinner
+        android:id="@+id/dataSpinner"
+        style="@style/spinner_style" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <ListView
+            android:id="@+id/dataListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+    </ScrollView>
+</LinearLayout>
